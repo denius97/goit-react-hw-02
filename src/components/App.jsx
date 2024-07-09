@@ -23,26 +23,39 @@ function App() {
 
   const updateFeedback = (feedbackType) => {
     setFeedback((prev) => {
-      return feedbackType
-        ? { ...prev, [feedbackType]: prev[feedbackType] + 1 }
-        : {
-            good: 0,
-            neutral: 0,
-            bad: 0,
-          };
+      return { ...prev, [feedbackType]: prev[feedbackType] + 1 };
+    });
+  };
+
+  const resetFeedback = () => {
+    setFeedback({
+      good: 0,
+      neutral: 0,
+      bad: 0,
     });
   };
 
   const totalFeedback = feedback.good + feedback.neutral + feedback.bad;
+  const positiveFeedback = Math.round(
+    ((feedback.good + feedback.neutral) / totalFeedback) * 100
+  );
   return (
     <div className={css.app}>
       <Description
         name="Sip Happens Café"
         description="Please leave your feedback about our service by selecting one of the options below."
       />
-      <Options updateFeedback={updateFeedback} totalFeedback={totalFeedback} />
+      <Options
+        updateFeedback={updateFeedback}
+        resetFeedback={resetFeedback}
+        totalFeedback={totalFeedback}
+      />
       {totalFeedback > 0 ? (
-        <Feedback feedback={feedback} totalFeedback={totalFeedback} />
+        <Feedback
+          feedback={feedback}
+          totalFeedback={totalFeedback}
+          positiveFeedback={positiveFeedback}
+        />
       ) : (
         <Notification />
       )}
